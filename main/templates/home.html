@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>SocialHub</title>
+	s<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">   
+   <link href="{% static 'main/css/reset.css' %}" rel="stylesheet"/>
+	<link href="{% static 'main/js/bootstrap-3.3.5/css/bootstrap.min.css' %}" rel="stylesheet">   
+   <link href="{% static 'main/css/component.css' %}" rel="stylesheet"/>
+   <script src="{% static 'main/js/modernizer.js' %}"></script>
+</head>
+<style>
+body{
+	background-color: #ddd;
+  font-family: 'Lato', sans-serif!important;
+  color: #A9A9A9;
+}
+video{
+	max-width: 180px;
+}
+</style>
+<div class="container-fluid">
+	<div class="row">
+			<section id="photostack-1" class="photostack photostack-start">
+				<div>
+					{% for post in posts %}
+						{% if post.post_type == "instagram" %}
+							{% if post.image %}
+							<figure class="{{post.post_type}}">
+								<a href="{{post.url}}" class="photostack-img">
+									{% if post.media_type == "video" %}
+										<video controls autoplay loop>
+										  <source src="{{post.image}}" type="video/mp4">
+										</video>
+									{% else %}
+									<img src="{{post.image}}" alt="{{post.name}}"/>
+									{% endif %}								
+									</a>
+								<figcaption>
+									<h2 class="photostack-title">{{post.text}}</h2>
+								</figcaption>
+							</figure>							
+							{% endif %}						
+						{% else %}
+							<figure class="{{post.post_type}}">
+								<a href="{{post.url}}" class="photostack-img">
+								{% if post.image %}
+									<img src="{{post.image}}" alt="{{post.name}}"/></a>
+								{% endif %}					
+								<figcaption>
+									<h2 class="photostack-title">{{post.text}}</h2>
+								</figcaption>
+							</figure>							
+							
+						{% endif %}
+					{% endfor %}
+				</div>
+			</section>		
+	</div>
+</div>
+
+<div class="csrf_token hidden">
+   {% csrf_token %}
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write("<script src='{% static 'main/js/jquery.js'%} '>\x3C/script>")</script>
+<script src="{% static 'main/js/bootstrap-3.3.5/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'main/js/classie.js' %}"></script>
+<script src="{% static 'main/js/photostack.js' %}"></script>
+<script>
+
+new Photostack( document.getElementById( 'photostack-1' ), {
+  // any other options here,
+    afterInit: function(ps) {
+        setTimeout(function() {
+            ps._open(true);
+        }, 6000);
+    },
+    afterShowPhoto: function(ps) {
+        setTimeout(function() {
+            ps._navigate('next');
+        }, 6000);
+    }
+});		
+</script>
+</body>
+</html>
